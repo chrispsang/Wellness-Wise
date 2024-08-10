@@ -18,7 +18,12 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    node-gyp \
+    pkg-config \
+    python3 \
+    python3-pip
 
 # Install node modules
 COPY --link package-lock.json package.json ./
@@ -31,6 +36,12 @@ COPY --link . .
 # Final stage for app image
 FROM base
 
+# Install Python 3 in the final stage as well
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    python3 \
+    python3-pip
+    
 # Copy built application
 COPY --from=build /app /app
 
