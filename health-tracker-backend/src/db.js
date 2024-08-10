@@ -1,12 +1,15 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
+// Determine if the environment is production
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Create the pool configuration based on the environment
 const pool = new Pool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT
+    connectionString: isProduction
+        ? process.env.DATABASE_URL
+        : `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+    ssl: isProduction ? { rejectUnauthorized: false } : false,  
 });
 
 module.exports = pool;
