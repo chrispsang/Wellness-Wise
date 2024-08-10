@@ -12,7 +12,14 @@ const goalRoutes = require('./routes/goalRoutes');
 const app = express();
 
 app.use(bodyParser.json());
-app.use(cors());
+
+const corsOptions = {
+    origin: ['https://wellness-wise.vercel.app', 'http://localhost:4200'], 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+  
+  app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
     res.send('Welcome to the Health Tracker API!');
