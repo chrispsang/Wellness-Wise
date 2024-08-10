@@ -12,19 +12,23 @@ export class LoginComponent {
     username: '',
     password: ''
   };
-  errorMessage: string = ''; 
+  errorMessage: string = '';
 
   constructor(private apiService: ApiService, private router: Router) { }
 
   login() {
     this.apiService.login(this.credentials).subscribe(response => {
       console.log('User logged in', response);
-      localStorage.setItem('token', response.accessToken); 
-      localStorage.setItem('userId', response.userId); 
-      this.router.navigate(['/dashboard']); 
+      localStorage.setItem('token', response.accessToken);
+      localStorage.setItem('userId', response.userId);
+      this.router.navigate(['/dashboard']);
     }, error => {
       console.error('Login error', error);
-      this.errorMessage = error.error.message; 
+      if (error.status === 404) {  
+        this.errorMessage = 'Username not found. Please register first.';
+      } else {
+        this.errorMessage = 'Login failed. Please check your credentials and try again.';
+      }
     });
   }
 

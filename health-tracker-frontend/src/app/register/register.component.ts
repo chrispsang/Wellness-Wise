@@ -13,25 +13,30 @@ export class RegisterComponent {
     password: '',
     email: ''
   };
-  errorMessage: string = '';  
+  errorMessage: string = '';
 
   constructor(private apiService: ApiService, private router: Router) { }
 
   register() {
-    if (!this.validateEmail(this.user.email)) {  
-      this.errorMessage = 'Please enter a valid email address.';  
+    if (!this.validateEmail(this.user.email)) {
+      this.errorMessage = 'Please enter a valid email address.';
       return;
     }
+
     this.apiService.register(this.user).subscribe(response => {
       console.log('User registered', response);
       this.router.navigate(['/login']);
     }, error => {
       console.error('Registration error', error);
-      this.errorMessage = error.error.message;  
+      if (error.status === 409) {  
+        this.errorMessage = 'An account with this username or email already exists.';
+      } else {
+        this.errorMessage = 'Registration failed. Please try again.';
+      }
     });
   }
 
-  validateEmail(email: string): boolean {  
+  validateEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   }
