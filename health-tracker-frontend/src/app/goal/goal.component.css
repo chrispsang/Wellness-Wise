@@ -1,0 +1,113 @@
+
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+.goal-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.goal-form .form-group {
+  margin-bottom: 15px;
+}
+
+.goal-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.goal-form .form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.button-group {
+  text-align: center;
+}
+
+.button-group .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.button-group .btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.button-group .btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.goal-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+
+.goal-item {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+.goal-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.goal-details p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.goal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.goal-actions .btn-edit {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.goal-actions .btn-delete {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.instruction {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}

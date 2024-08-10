@@ -1,0 +1,19 @@
+<div class="auth-wrapper">
+  <div class="auth-image">
+    <img src="assets/welcome-image.jpg" alt="Welcome Image">
+    <h1>Welcome to Wellness Wise</h1>
+  </div>
+  <div class="auth-container">
+    <h2>Login</h2>
+    <p>Don't have an account? <a (click)="toggleForm()">Register</a></p>
+    <form (ngSubmit)="login()">
+      <label for="username">Username:</label>
+      <input id="username" [(ngModel)]="credentials.username" name="username" required>
+      
+      <label for="password">Password:</label>
+      <input id="password" type="password" [(ngModel)]="credentials.password" name="password" required>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div> 
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>

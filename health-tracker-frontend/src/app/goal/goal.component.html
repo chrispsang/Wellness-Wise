@@ -1,0 +1,47 @@
+<div class="goal-container">
+  <h2>Goals</h2>
+  <p class="instruction">
+    Set your health and wellness goals by specifying the type of goal, target value, and time frame. Track your progress over time and update your goals as needed to stay on track.
+  </p>
+  <form (ngSubmit)="addGoal()" class="goal-form">
+    <div class="form-group">
+      <label for="type">Type:</label>
+      <input id="type" [(ngModel)]="goal.type" name="type" required class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="target">Target:</label>
+      <input id="target" type="number" [(ngModel)]="goal.target_value" name="target_value" required class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="progress">Progress:</label>
+      <input id="progress" type="number" [(ngModel)]="goal.current_value" name="current_value" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="startDate">Start Date:</label>
+      <input id="startDate" type="date" [(ngModel)]="goal.start_date" name="start_date" required class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="endDate">End Date:</label>
+      <input id="endDate" type="date" [(ngModel)]="goal.end_date" name="end_date" class="form-control">
+    </div>
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary">{{ isEditing ? 'Update Goal' : 'Add Goal' }}</button>
+      <button *ngIf="isEditing" type="button" (click)="cancelEdit()" class="btn btn-secondary">Cancel</button>
+    </div>
+  </form>
+
+  <h3>Goal List</h3>
+  <ul class="goal-list">
+    <li *ngFor="let goal of goals" class="goal-item">
+      <div class="goal-details">
+        <p>{{ goal.type }}: {{ goal.target_value }} (Progress: {{ goal.current_value }})</p>
+        <p>Start Date: {{ goal.start_date | date }}</p>
+        <p>End Date: {{ goal.end_date | date }}</p>
+        <div class="goal-actions">
+          <button (click)="editGoal(goal)" class="btn btn-edit">Edit</button>
+          <button (click)="deleteGoal(goal.id!)" class="btn btn-delete">Delete</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

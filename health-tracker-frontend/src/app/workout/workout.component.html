@@ -1,0 +1,49 @@
+
+<div class="workout-container">
+    <h2>Workouts</h2>
+    
+    <h3>Recommendations:</h3>
+    <div *ngIf="recommendations.length > 0">
+        <ul>
+            <li *ngFor="let recommendation of recommendations">
+                {{ recommendation }}
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="recommendations.length === 0">
+        <p>No recommendations available.</p>
+    </div>
+
+    <form (ngSubmit)="addWorkout()" class="workout-form">
+        <div class="form-group">
+            <label for="type">Type:</label>
+            <input id="type" [(ngModel)]="workout.type" name="type" required>
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input id="date" type="date" [(ngModel)]="workout.date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="startTime">Start Time:</label>
+            <input id="startTime" type="time" [(ngModel)]="workout.startTime" name="startTime" required>
+        </div>
+        <div class="form-group">
+            <label for="endTime">End Time:</label>
+            <input id="endTime" type="time" [(ngModel)]="workout.endTime" name="endTime" required>
+        </div>
+        <button type="submit">{{ isEditing ? 'Update' : 'Add' }} Workout</button>
+        <button type="button" *ngIf="isEditing" (click)="cancelEdit()">Cancel</button>
+    </form>
+  
+    <div *ngFor="let date of getWorkoutDates()" class="workout-group">
+        <h3>{{ date }}</h3>
+        <ul>
+            <li *ngFor="let workout of groupedWorkouts[date]">
+                {{ workout.type }} from {{ workout.formattedStartTime }} to {{ workout.formattedEndTime }}
+                - Duration: {{ workout.duration }} minutes
+                <button (click)="editWorkout(workout)">Edit</button>
+                <button (click)="deleteWorkout(workout.id!)">Delete</button>
+            </li>
+        </ul>
+    </div>
+</div>

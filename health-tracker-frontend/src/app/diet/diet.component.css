@@ -1,0 +1,200 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2.title {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+.recommendations,
+.no-recommendations {
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.diet-form .form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.food-item-headers {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  padding: 10px 0;
+  border-bottom: 2px solid #eee;
+}
+
+.food-item-header,
+.calories-header,
+.meal-type-header {
+  flex: 1;
+  text-align: center;
+}
+
+.food-item-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.food-item-group input,
+.food-item-group select {
+  flex: 1;
+  min-width: 30%;
+  margin-bottom: 10px;
+}
+
+.food-item-group input:first-child {
+  margin-right: 10px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-add {
+  background-color: #28a745;
+  color: white;
+  margin-top: 10px;
+}
+
+.btn-remove {
+  background-color: #dc3545;
+  color: white;
+  margin-left: 10px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  width: 100%;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  margin-left: 10px;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.diet-list {
+  margin-top: 30px;
+}
+
+.list-group-item {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.diet-item .item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.diet-item .item-body {
+  padding-left: 10px;
+}
+
+.meal-type {
+  font-style: italic;
+  color: #888;
+  margin-left: 10px;
+}
+
+.diet-form .form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.diet-form .btn-cancel {
+  margin-left: 10px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .food-item-headers,
+  .food-item-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .food-item-header,
+  .calories-header,
+  .meal-type-header,
+  .food-item-group input,
+  .food-item-group select {
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+
+  .btn-add,
+  .btn-remove {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 48%;
+  }
+}

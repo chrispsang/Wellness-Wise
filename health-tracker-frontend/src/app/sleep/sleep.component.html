@@ -1,0 +1,46 @@
+<div class="sleep-container">
+
+  <h3>Sleep Tips</h3>
+  <ul>
+    <li *ngFor="let tip of sleepTips">{{ tip }}</li>
+  </ul>
+  
+  <h2>Sleep Tracking</h2>
+  <form (ngSubmit)="addSleep()" class="sleep-form">
+    <div class="form-group">
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" [(ngModel)]="sleep.date" required class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="startTime">Start Time:</label>
+      <input type="time" id="startTime" name="startTime" [(ngModel)]="sleep.startTime" required class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="endTime">End Time:</label>
+      <input type="time" id="endTime" name="endTime" [(ngModel)]="sleep.endTime" required class="form-control">
+    </div>
+    <div class="button-group">
+      <button type="submit" class="btn-primary">{{ isEditing ? 'Update Sleep' : 'Add Sleep' }}</button>
+      <button *ngIf="isEditing" type="button" (click)="cancelEdit()" class="btn-secondary">Cancel</button>
+    </div>
+  </form>
+
+  <h3>Sleep Log</h3>
+  <div *ngFor="let date of keys(groupedSleeps)" class="sleep-date-group">
+    <h4>{{ date | date:'yyyy-MM-dd' }}</h4>
+    <ul class="sleep-list">
+      <li *ngFor="let sleep of groupedSleeps[date]" class="sleep-item">
+        <div class="sleep-details">
+          <div class="sleep-info">
+            <span class="sleep-time">{{ sleep.startTime }} - {{ sleep.endTime }}</span>
+            <p class="sleep-hours">{{ sleep.hours }} hours</p>
+          </div>
+          <div class="sleep-actions">
+            <button (click)="editSleep(sleep)" class="btn-edit">Edit</button>
+            <button (click)="deleteSleep(sleep.id)" class="btn-delete">Delete</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

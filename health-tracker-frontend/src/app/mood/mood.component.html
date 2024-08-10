@@ -1,0 +1,49 @@
+<div class="mood-container">
+  <h2>Mood Tracking</h2>
+  <form (ngSubmit)="addMood()" class="mood-form">
+    <div class="form-group">
+      <label for="mood">Mood:</label>
+      <input type="text" id="mood" name="mood" [(ngModel)]="mood.mood" required class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="notes">Notes:</label>
+      <textarea id="notes" name="notes" [(ngModel)]="mood.notes" required class="form-control"></textarea>
+    </div>
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary">{{ isEditing ? 'Update Mood' : 'Add Mood' }}</button>
+      <button *ngIf="isEditing" type="button" (click)="cancelEdit()" class="btn btn-secondary">Cancel</button>
+    </div>
+  </form>
+
+  <h3>Mood Log</h3>
+  <div *ngFor="let date of getMoodDates()" class="mood-date-group">
+    <h4>{{ date }}</h4>
+    <ul class="mood-list">
+      <li *ngFor="let mood of groupedMoods[date]" class="mood-item">
+        <div class="mood-details">
+          <div class="mood-info">
+            <span class="mood-text">{{ mood.mood }}</span>
+            <p class="mood-notes">{{ mood.notes }}</p>
+            <p class="mood-insights"><strong>Insights:</strong> {{ mood.insights }}</p>
+          </div>
+          <div class="mood-actions">
+            <button (click)="editMood(mood)" class="btn btn-edit">Edit</button>
+            <button (click)="deleteMood(mood.id)" class="btn btn-delete">Delete</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <h3>Mood Trends</h3>
+  <canvas id="moodTrendsChart"></canvas>
+  <div class="instructions">
+    <h3>How to Read the Chart:</h3>
+    <ul>
+      <li><strong>Sentiment Score > 2:</strong> Very positive mood! Keep up the good vibes.</li>
+      <li><strong>Sentiment Score 0 to 2:</strong> Neutral mood. Engage in enjoyable activities to boost your mood.</li>
+      <li><strong>Sentiment Score -2 to 0:</strong> Slightly down. Consider relaxing or talking to a friend.</li>
+      <li><strong>Sentiment Score < -2:</strong> Negative mood. Reach out to loved ones or practice mindfulness.</li>
+    </ul>
+  </div>
+</div>

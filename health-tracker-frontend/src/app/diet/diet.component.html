@@ -1,0 +1,96 @@
+<div class="container">
+  <h2 class="title">Diet Recommendations</h2>
+  
+  <div *ngIf="recommendations.length > 0" class="recommendations">
+    <ul>
+      <li *ngFor="let recommendation of recommendations">
+        {{ recommendation }}
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="recommendations.length === 0" class="no-recommendations">
+    <p>No recommendations available.</p>
+  </div>
+  
+  <h2 class="title">Diet Tracker</h2>
+
+  <form (ngSubmit)="addDiet()" #dietForm="ngForm" class="diet-form">
+    <div class="form-group">
+      <label for="date">Date</label>
+      <input
+        type="date"
+        id="date"
+        [(ngModel)]="diet.date"
+        name="date"
+        required
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <div class="food-item-headers">
+        <span class="food-item-header">Food Items</span>
+        <span class="calories-header">Calories</span>
+        <span class="meal-type-header">Meal Type</span>
+      </div>
+      <div *ngFor="let item of diet.food_items; let i = index" class="food-item-group">
+        <input
+          type="text"
+          [(ngModel)]="item.name"
+          name="foodItem{{i}}"
+          required
+          class="form-control"
+          placeholder="Food Item"
+        />
+        <input
+          type="number"
+          [(ngModel)]="item.calories"
+          name="calories{{i}}"
+          required
+          class="form-control"
+          placeholder="Calories"
+        />
+        <select [(ngModel)]="item.meal_type" name="mealType{{i}}" required class="form-control">
+          <option value="breakfast">Breakfast</option>
+          <option value="lunch">Lunch</option>
+          <option value="dinner">Dinner</option>
+          <option value="snack">Snack</option>
+        </select>
+        <button type="button" (click)="removeFoodItem(i)" class="btn btn-remove">Remove</button>
+      </div>
+      <button type="button" (click)="addFoodItem()" class="btn btn-add">Add Food Item</button>
+    </div>
+    
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-primary" [disabled]="!dietForm.form.valid">
+        {{ editMode ? 'Update Diet' : 'Add Diet' }}
+      </button>
+      <button *ngIf="editMode" type="button" (click)="cancelEdit()" class="btn btn-secondary btn-cancel">
+        Cancel Edit
+      </button>
+    </div>
+  </form>
+
+  <div class="diet-list">
+    <h3>Your Diet Entries</h3>
+    <ul class="list-group">
+      <li *ngFor="let diet of diets" class="list-group-item">
+        <div class="diet-item">
+          <div class="item-header">
+            <span>{{ diet.formattedDate }}</span>
+            <div>
+              <button (click)="editDiet(diet)" class="btn btn-edit">Edit</button>
+              <button (click)="deleteDiet(diet.id)" class="btn btn-delete">Delete</button>
+            </div>
+          </div>
+          <div class="item-body">
+            <div *ngFor="let item of diet.food_items">
+              <strong>{{ item.name }}</strong>: {{ item.calories }} Calories 
+              <span class="meal-type">({{ item.meal_type }})</span>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
