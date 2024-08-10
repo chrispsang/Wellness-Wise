@@ -31,6 +31,9 @@
   </form>
 
   <h3>Goal List</h3>
+  <p *ngIf="goals.length === 0" class="no-goals-message">
+    No goals available. Please add your goals above.
+  </p>
   <ul class="goal-list">
     <li *ngFor="let goal of goals" class="goal-item">
       <div class="goal-details">

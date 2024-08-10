@@ -73,7 +73,11 @@
 
   <div class="diet-list">
     <h3>Your Diet Entries</h3>
-    <ul class="list-group">
+
+    <p *ngIf="diets.length === 0" class="no-diets-message">
+      No diet entries available. Please add your meals above.
+    </p>
+    <ul *ngIf="diets.length > 0" class="list-group">
       <li *ngFor="let diet of diets" class="list-group-item">
         <div class="diet-item">
           <div class="item-header">

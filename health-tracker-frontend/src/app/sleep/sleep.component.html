@@ -26,6 +26,9 @@
   </form>
 
   <h3>Sleep Log</h3>
+  <p *ngIf="keys(groupedSleeps).length === 0" class="no-sleeps-message">
+    No sleep logs available. Please add your sleep entries above.
+  </p>
   <div *ngFor="let date of keys(groupedSleeps)" class="sleep-date-group">
     <h4>{{ date | date:'yyyy-MM-dd' }}</h4>
     <ul class="sleep-list">
