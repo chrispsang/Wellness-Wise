@@ -12,7 +12,6 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV="production"
 
-
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
@@ -32,6 +31,8 @@ RUN npm ci
 # Copy application code
 COPY --link . .
 
+# Install Python dependencies with --break-system-packages flag
+RUN pip3 install pandas --break-system-packages
 
 # Final stage for app image
 FROM base
@@ -41,9 +42,12 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
     python3 \
     python3-pip
-    
+
 # Copy built application
 COPY --from=build /app /app
+
+# Install Python dependencies in final image
+RUN pip3 install pandas --break-system-packages
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
