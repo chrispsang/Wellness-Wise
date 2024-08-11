@@ -99,7 +99,7 @@ li:last-child {
 li button {
     font-size: 0.9em;
     margin-left: 10px;
-    background-color: #dc3545;
+    /* background-color: #dc3545; */
 }
 
 li button:hover {
