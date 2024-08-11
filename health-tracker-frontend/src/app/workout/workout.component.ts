@@ -40,9 +40,29 @@ export class WorkoutComponent implements OnInit {
     constructor(private apiService: ApiService) { }
 
     addWorkout() {
+        if (!this.workout.type.trim()) {
+            alert('Workout type cannot be empty.');
+            return;
+        }
+
+        if (!this.workout.date!.trim()) {
+            alert('Workout date cannot be empty.');
+            return;
+        }
+
+        if (!this.workout.startTime!.trim()) {
+            alert('Workout start time cannot be empty.');
+            return;
+        }
+
+        if (!this.workout.endTime!.trim()) {
+            alert('Workout end time cannot be empty.');
+            return;
+        }
+
         const startTime = `${this.workout.date}T${this.workout.startTime}`;
         const endTime = `${this.workout.date}T${this.workout.endTime}`;
-    
+
         if (this.isEditing && this.editWorkoutId !== null) {
             this.apiService.updateWorkout(this.editWorkoutId, { ...this.workout, startTime, endTime }).subscribe(response => {
                 console.log('Workout updated', response);
@@ -58,13 +78,50 @@ export class WorkoutComponent implements OnInit {
                 this.getWorkouts();
             });
         }
-    }
+    }    
     
     getWorkouts() {
         this.apiService.getWorkouts().subscribe(response => {
-            this.groupedWorkouts = response;
+            const groupedWorkouts: { [date: string]: Workout[] } = {};
+    
+            Object.keys(response).forEach(date => {
+                response[date].forEach((workout: Workout) => {
+                    if (workout.start_time) {
+                        const localStartTime = new Date(workout.start_time);
+                        const localEndTime = workout.end_time ? new Date(workout.end_time) : null;
+    
+                        let duration = 0;
+    
+                        if (localEndTime) {
+                            // If the end time is before the start time, it means the end time is past midnight
+                            if (localEndTime < localStartTime) {
+                                // Add 24 hours (in minutes) to the end time before subtracting start time
+                                duration = (localEndTime.getTime() + 24 * 60 * 60 * 1000 - localStartTime.getTime()) / 60000;
+                            } else {
+                                duration = (localEndTime.getTime() - localStartTime.getTime()) / 60000;
+                            }
+                        }
+    
+                        workout.formattedDate = localStartTime.toLocaleDateString();
+                        workout.formattedStartTime = localStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        workout.formattedEndTime = localEndTime ? localEndTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+                        workout.duration = Math.round(duration);
+    
+                        if (!groupedWorkouts[workout.formattedDate]) {
+                            groupedWorkouts[workout.formattedDate] = [];
+                        }
+    
+                        groupedWorkouts[workout.formattedDate].push(workout);
+                    }
+                });
+            });
+    
+            this.groupedWorkouts = groupedWorkouts;
         });
     }
+    
+    
+    
 
     getWorkoutDates(): string[] {
         return Object.keys(this.groupedWorkouts);
@@ -86,27 +143,27 @@ export class WorkoutComponent implements OnInit {
     editWorkout(workout: Workout) {
         this.isEditing = true;
         this.editWorkoutId = workout.id!;
-
+    
         console.log('Editing workout:', workout);
-
+    
         try {
             const date = workout.date || workout.start_time?.split('T')[0];
             const startTime = workout.start_time || `${date}T${workout.startTime}`;
             const endTime = workout.end_time || `${date}T${workout.endTime}`;
-
+    
             const startDate = new Date(startTime);
             const endDate = new Date(endTime);
-
+    
             if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
                 throw new Error('Invalid date format');
             }
-
-            const formattedDate = startDate.toISOString().split('T')[0];
+            
+            const formattedDate = new Date(startDate.getTime() - startDate.getTimezoneOffset() * 60000).toISOString().split('T')[0];
             const formattedStartTime = startDate.toTimeString().split(' ')[0].substring(0, 5);
             const formattedEndTime = endDate.toTimeString().split(' ')[0].substring(0, 5);
-
+    
             console.log('Parsed dates:', { formattedDate, formattedStartTime, formattedEndTime });
-
+    
             this.workout = {
                 type: workout.type,
                 date: formattedDate,
@@ -117,6 +174,7 @@ export class WorkoutComponent implements OnInit {
             console.error('Error parsing dates:', error);
         }
     }
+    
 
     cancelEdit() {
         this.isEditing = false;
