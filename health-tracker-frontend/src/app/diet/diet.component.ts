@@ -33,20 +33,46 @@ export class DietComponent implements OnInit {
 
   addDiet() {
     const { food_items, date } = this.diet;
-    const formattedDate = new Date(date).toISOString().split('T')[0];
-    
-    if (this.editMode && this.editDietId !== null) {
-      this.apiService.updateDiet(this.editDietId, { food_items, date: formattedDate }).subscribe(response => {
-        this.getDiets(); 
-        this.resetForm(); 
-      });
-    } else {
-      this.apiService.addDiet({ food_items, date: formattedDate }).subscribe(response => {
-        this.getDiets(); 
-        this.resetForm(); 
-      });
+    // Check if the date is not empty and valid
+  if (!date.trim()) {
+    alert('Diet date cannot be empty.');
+    return;
+  }
+  const formattedDate = new Date(date).toISOString().split('T')[0];
+  if (isNaN(new Date(formattedDate).getTime())) {
+    alert('Diet date is invalid.');
+    return;
+  }
+
+  // Check if food items are valid
+  for (const item of food_items) {
+    if (!item.name.trim()) {
+      alert('Food item name cannot be empty.');
+      return;
+    }
+    if (item.calories <= 0) {
+      alert('Calories cannot be zero or empty or a negative value.');
+      return;
+    }
+    if (!item.meal_type.trim()) {
+      alert('Meal type cannot be empty.');
+      return;
     }
   }
+  
+  if (this.editMode && this.editDietId !== null) {
+    this.apiService.updateDiet(this.editDietId, { food_items, date: formattedDate }).subscribe(response => {
+      this.getDiets(); 
+      this.resetForm(); 
+    });
+  } else {
+    this.apiService.addDiet({ food_items, date: formattedDate }).subscribe(response => {
+      this.getDiets(); 
+      this.resetForm(); 
+    });
+  }
+}
+  
 
   getDiets() {
     this.apiService.getDiets().subscribe((response: { id: number, date: string, formattedDate: string, food_items: FoodItem[] }[]) => {

@@ -152,7 +152,12 @@ renderChart(): void {
   
 addMood(): void {
   if (!this.mood.mood.trim()) {
-    console.error('Mood cannot be empty.');
+    alert('Mood cannot be empty.');
+    return;
+  }
+
+  if (!this.mood.notes.trim()) {
+    alert('Notes cannot be empty.');
     return;
   }
 
@@ -174,6 +179,7 @@ addMood(): void {
     );
   }
 }
+
 
 resetForm(): void {
   this.mood = { mood: '', notes: '' }; 

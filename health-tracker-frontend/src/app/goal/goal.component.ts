@@ -24,6 +24,49 @@ export class GoalComponent implements OnInit {
   constructor(private apiService: ApiService) {}
 
   addGoal() {
+    if (!this.goal.type.trim()) {
+      alert('Goal type cannot be empty.');
+      return;
+    }
+    
+    if (this.goal.target_value === undefined || this.goal.target_value <= 0) {
+      alert('Target value must be a positive integer.');
+      return;
+    }
+  
+    if (!Number.isInteger(this.goal.target_value)) {
+      alert('Target value must be an integer.');
+      return;
+    }
+    
+    if (this.goal.current_value === undefined || this.goal.current_value < 0) {
+      alert('Progress must be a non-negative integer.');
+      return;
+    }
+  
+    if (!Number.isInteger(this.goal.current_value)) {
+      alert('Progress must be an integer.');
+      return;
+    }
+    
+    if (!this.goal.start_date.trim()) {
+      alert('Start date cannot be empty.');
+      return;
+    }
+    
+    if (!this.goal.end_date?.trim()) {
+      alert('End date cannot be empty.');
+      return;
+    }
+
+    // Check if start_date is before end_date
+    const startDate = new Date(this.goal.start_date);
+    const endDate = new Date(this.goal.end_date);
+    if (startDate >= endDate) {
+      alert('Start date must be before the end date.');
+      return;
+    }
+  
     if (this.isEditing && this.editGoalId !== null) {
       this.apiService.updateGoal(this.editGoalId, this.goal).subscribe(response => {
         console.log('Goal updated', response);
@@ -39,6 +82,7 @@ export class GoalComponent implements OnInit {
       });
     }
   }
+  
 
   getGoals() {
     this.apiService.getGoals().subscribe(response => {

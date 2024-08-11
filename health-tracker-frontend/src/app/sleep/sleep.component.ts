@@ -33,11 +33,19 @@ export class SleepComponent implements OnInit {
   }
 
   addSleep() {
-    if (!this.sleep.date || !this.sleep.startTime || !this.sleep.endTime) {
-      console.error('Date, start time, or end time is missing');
+    if (!this.sleep.date.trim()) {
+      alert('Sleep date cannot be empty.');
       return;
     }
-
+    if (!this.sleep.startTime.trim()) {
+      alert('Sleep start time cannot be empty.');
+      return;
+    }
+    if (!this.sleep.endTime.trim()) {
+      alert('Sleep end time cannot be empty.');
+      return;
+    }
+  
     if (this.isEditing && this.editSleepId !== null) {
       this.apiService.updateSleep(this.editSleepId, this.sleep).subscribe(
         () => {
@@ -59,6 +67,7 @@ export class SleepComponent implements OnInit {
       );
     }
   }
+  
 
   editSleep(sleep: Sleep) {
     console.log('Editing sleep:', sleep); 
