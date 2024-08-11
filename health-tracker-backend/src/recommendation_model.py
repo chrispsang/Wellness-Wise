@@ -28,6 +28,9 @@ def suggest_workout_routine(user_data):
         "Take rest days to allow your muscles to recover and grow stronger."
     ]
 
+    # Convert workout types to lowercase for case-insensitivity
+    df['type'] = df['type'].str.lower()
+
     most_frequent_types = df['type'].value_counts().index.tolist()
     
     recommendations = []

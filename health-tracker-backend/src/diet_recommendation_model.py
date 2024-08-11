@@ -23,6 +23,8 @@ def suggest_diet_routine(user_data):
 
     recommendations = []
     
+    # Convert food items to lowercase for case-insensitivity
+    df['foodItems'] = df['foodItems'].str.lower()
     most_frequent_items = df['foodItems'].value_counts().index.tolist()
     
     for food_item in most_frequent_items:
