@@ -62,7 +62,7 @@
     </div>
     
     <div class="form-buttons">
-      <button type="submit" class="btn btn-primary" [disabled]="!dietForm.form.valid">
+      <button type="submit" class="btn btn-primary">
         {{ editMode ? 'Update Diet' : 'Add Diet' }}
       </button>
       <button *ngIf="editMode" type="button" (click)="cancelEdit()" class="btn btn-secondary btn-cancel">
