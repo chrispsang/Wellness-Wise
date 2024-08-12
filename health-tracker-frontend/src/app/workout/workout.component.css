@@ -2,128 +2,152 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: 'Roboto', sans-serif;
 }
 
 h2, h3 {
-    color: #333;
-    font-weight: 700;
     text-align: center;
-    margin-bottom: 20px;
+    color: #333;
 }
 
-h3 {
-    font-size: 1.2rem;
-    color: #555;
+.recommendations-list, .workout-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.recommendations-list li, .workout-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.workout-form {
+    margin-bottom: 20px;
 }
 
 .form-group {
     margin-bottom: 15px;
 }
 
-label {
+.form-group label {
     display: block;
     margin-bottom: 5px;
-    font-weight: 500;
-    color: #666;
+    font-weight: bold;
 }
 
-input[type="text"],
-input[type="date"],
-input[type="time"] {
-    width: calc(100% - 10px);
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    color: #333;
-    outline: none;
-    transition: border-color 0.3s;
-}
-
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="time"]:focus {
-    border-color: #007bff;
-}
-
-button[type="submit"],
-button[type="button"] {
+.form-group input {
     width: 100%;
-    padding: 10px 0;
-    background-color: #007bff;
-    color: #fff;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-actions button {
+    padding: 10px 20px;
     border: none;
-    border-radius: 5px;
-    font-size: 1rem;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    background-color: #28a745;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover,
-button[type="button"]:hover {
-    background-color: #0056b3;
+.cancel-btn {
+    background-color: #dc3545;
 }
 
-button[type="button"] {
-    background-color: #6c757d;
-    margin-top: 10px;
+.form-actions button:hover {
+    background-color: #218838;
 }
 
-.workout-group {
-    margin-top: 30px;
+.cancel-btn:hover {
+    background-color: #c82333;
 }
 
-.workout-group h3 {
-    border-bottom: 2px solid #007bff;
+.workout-date-group {
+    margin-bottom: 20px;
+}
+
+.workout-date {
+    color: #007bff;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
-    margin-bottom: 15px;
-}
-
-ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-li {
-    padding: 10px;
-    background-color: #fff;
     margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.workout-details {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-li:last-child {
-    margin-bottom: 0;
+.workout-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
-li button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #ff7675;
-    border-radius: 5px;
-    font-size: 0.9rem;
+.workout-type {
+    font-weight: bold;
+    color: #444;
 }
 
-li button:hover {
-    background-color: #d63031;
+.workout-time {
+    font-style: italic;
+    color: #666;
 }
 
-li button:first-of-type {
-    background-color: #55efc4;
+.workout-duration {
+    color: #888;
 }
 
-li button:first-of-type:hover {
-    background-color: #00b894;
+.workout-actions {
+    display: flex;
+    gap: 10px;
 }
 
-p {
+.edit-btn, .delete-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.no-workouts-message, .no-recommendations {
     text-align: center;
-    color: #777;
+    color: #888;
+    font-style: italic;
 }
+

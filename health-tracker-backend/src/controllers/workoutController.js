@@ -3,29 +3,25 @@ const pool = require('../db');
 const { exec } = require('child_process');
 
 const addWorkout = async (req, res) => {
-    const { type, startTime, endTime } = req.body;
+    const { type, date, startTime, endTime } = req.body;
     const userId = req.user.id;
 
     try {
+        const startDateTime = new Date(`${date}T${startTime}`);
+        let endDateTime = new Date(`${date}T${endTime}`);
+
+        if (endDateTime < startDateTime) {
+            endDateTime.setDate(endDateTime.getDate() + 1);
+        }
+
+        const durationMinutes = Math.round((endDateTime - startDateTime) / 60000);
+
         const newWorkout = await pool.query(
-            'INSERT INTO workouts (user_id, type, start_time, end_time) VALUES ($1, $2, $3, $4) RETURNING *',
-            [userId, type, startTime, endTime]
+            'INSERT INTO workouts (user_id, type, date, start_time, end_time, duration) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [userId, type, date, startTime, endTime, durationMinutes]
         );
 
-        const startDate = new Date(newWorkout.rows[0].start_time);
-        const endDate = new Date(newWorkout.rows[0].end_time);
-        const formattedDate = startDate.toLocaleDateString();
-        const formattedStartTime = startDate.toLocaleTimeString();
-        const formattedEndTime = endDate.toLocaleTimeString();
-        const duration = Math.round((endDate - startDate) / 60000);
-
-        res.json({
-            ...newWorkout.rows[0],
-            formattedDate,
-            formattedStartTime,
-            formattedEndTime,
-            duration
-        });
+        res.json(newWorkout.rows[0]);
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -35,33 +31,13 @@ const getWorkouts = async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const workouts = await pool.query('SELECT * FROM workouts WHERE user_id = $1 ORDER BY start_time', [userId]);
+        const workouts = await pool.query(
+            'SELECT id, user_id, type, date, start_time as "startTime", end_time as "endTime", duration FROM workouts WHERE user_id = $1 ORDER BY start_time',
+            [userId]
+        );
 
-        const groupedWorkouts = workouts.rows.reduce((acc, workout) => {
-            const startDate = new Date(workout.start_time);
-            const endDate = new Date(workout.end_time);
-            const formattedDate = startDate.toISOString().split('T')[0];
-            const formattedStartTime = startDate.toTimeString().split(' ')[0].substring(0, 5);
-            const formattedEndTime = endDate.toTimeString().split(' ')[0].substring(0, 5);
-            const duration = Math.round((endDate - startDate) / 60000);
-
-            const formattedWorkout = {
-                ...workout,
-                formattedDate,
-                formattedStartTime,
-                formattedEndTime,
-                duration: isNaN(duration) ? 0 : duration 
-            };
-
-            if (!acc[formattedDate]) {
-                acc[formattedDate] = [];
-            }
-            acc[formattedDate].push(formattedWorkout);
-
-            return acc;
-        }, {});
-
-        res.json(groupedWorkouts);
+        const validWorkouts = workouts.rows.filter(workout => workout.date);
+        res.json(validWorkouts);
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -69,33 +45,25 @@ const getWorkouts = async (req, res) => {
 
 const updateWorkout = async (req, res) => {
     const { id } = req.params;
-    const { type, startTime, endTime } = req.body;
+    const { type, date, startTime, endTime } = req.body;
     const userId = req.user.id;
 
     try {
-        const updatedWorkout = await pool.query(
-            'UPDATE workouts SET type = $1, start_time = $2, end_time = $3 WHERE id = $4 AND user_id = $5 RETURNING *',
-            [type, startTime, endTime, id, userId]
-        );
+        const startDateTime = new Date(`${date}T${startTime}`);
+        let endDateTime = new Date(`${date}T${endTime}`);
 
-        if (updatedWorkout.rows.length === 0) {
-            return res.status(404).send('Workout not found');
+        if (endDateTime < startDateTime) {
+            endDateTime.setDate(endDateTime.getDate() + 1);
         }
 
-        const startDate = new Date(updatedWorkout.rows[0].start_time);
-        const endDate = new Date(updatedWorkout.rows[0].end_time);
-        const formattedDate = startDate.toLocaleDateString();
-        const formattedStartTime = startDate.toLocaleTimeString();
-        const formattedEndTime = endDate.toLocaleTimeString();
-        const duration = Math.round((endDate - startDate) / 60000);
+        const durationMinutes = Math.round((endDateTime - startDateTime) / 60000);
 
-        res.json({
-            ...updatedWorkout.rows[0],
-            formattedDate,
-            formattedStartTime,
-            formattedEndTime,
-            duration
-        });
+        const updatedWorkout = await pool.query(
+            'UPDATE workouts SET type = $1, date = $2, start_time = $3, end_time = $4, duration = $5 WHERE id = $6 AND user_id = $7 RETURNING *',
+            [type, date, startTime, endTime, durationMinutes, id, userId]
+        );
+
+        res.json(updatedWorkout.rows[0]);
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -106,24 +74,17 @@ const deleteWorkout = async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const deletedWorkout = await pool.query(
-            'DELETE FROM workouts WHERE id = $1 AND user_id = $2 RETURNING *',
+        await pool.query(
+            'DELETE FROM workouts WHERE id = $1 AND user_id = $2',
             [id, userId]
         );
-
-        if (deletedWorkout.rows.length === 0) {
-            return res.status(404).send('Workout not found');
-        }
-
-        res.json(deletedWorkout.rows[0]);
+        res.status(204).send();
     } catch (err) {
         res.status(500).send(err.message);
     }
 };
 
 const getRecommendations = async (req, res) => {
-    console.log('getRecommendations function called');
-
     if (!req.user || !req.user.id) {
         return res.status(401).send('Unauthorized: No user ID found');
     }
@@ -131,7 +92,7 @@ const getRecommendations = async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const { rows } = await pool.query('SELECT type, start_time, end_time FROM workouts WHERE user_id = $1', [userId]);
+        const { rows } = await pool.query('SELECT type, start_time, end_time, duration FROM workouts WHERE user_id = $1', [userId]);
 
         if (rows.length === 0) {
             return res.json({
@@ -143,22 +104,16 @@ const getRecommendations = async (req, res) => {
             });
         }
 
-        const data = {
-            type: rows.map(row => row.type.toLowerCase()),
-            duration: rows.map(row => {
-                const startDate = new Date(row.start_time);
-                const endDate = new Date(row.end_time);
-                const duration = Math.round((endDate - startDate) / 60000);
-                return isNaN(duration) ? 0 : duration;
-            }),
-        };
-
-        console.log('Data sent to Python script:', data);
+        const data = rows.map(row => ({
+            type: row.type.toLowerCase(),
+            duration: row.duration,
+            start_time: row.start_time,
+            end_time: row.end_time,
+        }));
 
         const pythonCommand = `python3 ./src/recommendation_model.py '${JSON.stringify(data)}'`;
 
         exec(pythonCommand, (err, stdout, stderr) => {
-            console.log('Python script executed');
             if (err) {
                 console.error('Error executing Python script:', err.message);
                 return res.status(500).send(`Error executing Python script: ${err.message}`);
@@ -169,9 +124,6 @@ const getRecommendations = async (req, res) => {
                 return res.status(500).send(`Python error: ${stderr}`);
             }
 
-            console.log('Raw Python script output:', stdout);
-
-            // Parse JSON output from Python script
             let jsonString;
             try {
                 jsonString = JSON.parse(stdout.trim());
@@ -180,7 +132,6 @@ const getRecommendations = async (req, res) => {
                 return res.status(500).send(`Error parsing Python output: ${parseErr.message}`);
             }
 
-            console.log('Parsed recommendations:', jsonString);
             res.json(jsonString);
         });
 
@@ -189,7 +140,6 @@ const getRecommendations = async (req, res) => {
         res.status(500).send(`Database error: ${error.message}`);
     }
 };
-
 
 module.exports = {
     addWorkout,

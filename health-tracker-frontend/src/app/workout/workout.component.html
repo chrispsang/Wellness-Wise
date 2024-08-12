@@ -1,16 +1,16 @@
 
 <div class="workout-container">
     <h2>Workouts</h2>
-    
+
     <h3>Recommendations:</h3>
     <div *ngIf="recommendations.length > 0">
-        <ul>
+        <ul class="recommendations-list">
             <li *ngFor="let recommendation of recommendations">
                 {{ recommendation }}
             </li>
         </ul>
     </div>
-    <div *ngIf="recommendations.length === 0">
+    <div *ngIf="recommendations.length === 0" class="no-recommendations">
         <p>No recommendations available.</p>
     </div>
 
@@ -31,19 +31,35 @@
             <label for="endTime">End Time:</label>
             <input id="endTime" type="time" [(ngModel)]="workout.endTime" name="endTime" required>
         </div>
-        <button type="submit">{{ isEditing ? 'Update' : 'Add' }} Workout</button>
-        <button type="button" *ngIf="isEditing" (click)="cancelEdit()">Cancel</button>
+        <div class="form-actions">
+            <button type="submit">{{ isEditing ? 'Update' : 'Add' }} Workout</button>
+            <button type="button" *ngIf="isEditing" (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+        </div>
     </form>
-  
-    <div *ngFor="let date of getWorkoutDates()" class="workout-group">
-        <h3>{{ date }}</h3>
-        <ul>
-            <li *ngFor="let workout of groupedWorkouts[date]">
-                {{ workout.type }} from {{ workout.formattedStartTime }} to {{ workout.formattedEndTime }}
-                - Duration: {{ workout.duration }} minutes
-                <button (click)="editWorkout(workout)">Edit</button>
-                <button (click)="deleteWorkout(workout.id!)">Delete</button>
+
+    <h3>Workout Log</h3>
+    <p *ngIf="keys(groupedWorkouts).length === 0" class="no-workouts-message">
+        No workout logs available. Please add your workout entries above.
+    </p>
+    <div *ngFor="let date of keys(groupedWorkouts)" class="workout-date-group">
+        <h4 *ngIf="date" class="workout-date">{{ date | date:'yyyy-MM-dd' }}</h4>
+        <ul class="workout-list">
+            <li *ngFor="let workout of groupedWorkouts[date]" class="workout-item">
+                <div class="workout-details">
+                    <div class="workout-info">
+                        <p class="workout-type">{{ workout.type }}</p>
+                        <span class="workout-time">{{ workout.startTime }} - {{ workout.endTime }}</span>
+                        <p class="workout-duration">{{ workout.duration }} minutes</p>
+                    </div>
+                    <div class="workout-actions">
+                        <button (click)="editWorkout(workout)" class="edit-btn">Edit</button>
+                        <button (click)="deleteWorkout(workout.id)" class="delete-btn">Delete</button>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
 </div>
+
+
+
