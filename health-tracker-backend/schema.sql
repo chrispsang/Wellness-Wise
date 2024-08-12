@@ -77,8 +77,8 @@ CREATE TABLE public.workouts (
     type CHARACTER VARYING(50),
     duration INTEGER,
     date DATE,
-    start_time TIMESTAMP WITHOUT TIME ZONE,
-    end_time TIMESTAMP WITHOUT TIME ZONE,
+    start_time TIME WITHOUT TIME ZONE,
+    end_time TIME WITHOUT TIME ZONE,
     CONSTRAINT workouts_pkey PRIMARY KEY (id),
     CONSTRAINT workouts_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)
 );
