@@ -12,13 +12,13 @@ const findDietByUserIdAndDate = async (userId, date) => {
 
 
 const addDiet = async (req, res) => {
-    const { food_items, date } = req.body;
+        const { food_items, date } = req.body;
     const userId = req.user.id;
 
     if (!userId || !food_items || !date) {
         return res.status(400).send('Invalid data');
     }
-
+  
     try {
         const formattedDate = new Date(date).toISOString().split('T')[0]; 
         const existingDiet = await findDietByUserIdAndDate(userId, formattedDate);
@@ -113,12 +113,12 @@ const updateDiet = async (req, res) => {
 
             // Insert updated food items for the diet entry
             const promises = food_items.map(item => {
-                if (!item.name || !item.calories) {
+                if (!item.name || !item.calories || !item.meal_type) { // Ensure meal_type is checked
                     throw new Error('Incomplete food item data');
                 }
                 return client.query(
-                    'INSERT INTO diet_food_items (diet_id, food_item, calories) VALUES ($1, $2, $3)',
-                    [dietId, item.name, item.calories]
+                    'INSERT INTO diet_food_items (diet_id, food_item, calories, meal_type) VALUES ($1, $2, $3, $4)',
+                    [dietId, item.name, item.calories, item.meal_type]
                 );
             });
 

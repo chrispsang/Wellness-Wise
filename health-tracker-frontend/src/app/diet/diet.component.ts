@@ -94,13 +94,17 @@ export class DietComponent implements OnInit {
 
   editDiet(diet: { id: number, date: string, food_items: FoodItem[] }) {
     this.diet = {
-      food_items: diet.food_items.map(item => ({ ...item })),
-      date: this.formatDateForInput(diet.date) // Format date for input
+      food_items: diet.food_items.map(item => ({
+        name: item.name,
+        calories: item.calories,
+        meal_type: item.meal_type 
+      })),
+      date: this.formatDateForInput(diet.date)
     };
     this.editMode = true;
     this.editDietId = diet.id;
   }
-
+  
   cancelEdit() {
     this.resetForm();
   }
