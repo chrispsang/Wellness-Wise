@@ -8,6 +8,7 @@ Wellness Wise is a comprehensive Health and Wellness Tracker that allows users t
 - [Tech Stack](#tech-stack)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
+- [Deployment](#deployment)
 
 ## Key Features
 
@@ -28,6 +29,7 @@ Wellness Wise is a comprehensive Health and Wellness Tracker that allows users t
 - **Database**: [PostgreSQL](https://www.postgresql.org/)
 - **Machine Learning**: [Python](https://www.python.org/) for sentiment analysis and recommendations
 - **Charting Library**: [Chart.js](https://www.chartjs.org/) for visualizing mood trends.
+- **Deployment**: [Vercel](https://vercel.com/) for frontend, [Fly.io](https://fly.io/) for backend, [Supabase](https://supabase.com/) for database.
 
 ## Prerequisites
 
@@ -168,5 +170,13 @@ ng serve
 
 ### 5. Access the Application
 Open your browser and go to http://localhost:4200 to access Wellness Wise.
+
+## Deployment
+
+The application is deployed and accessible via the following links:
+
+- **Frontend**: Deployed on Vercel at [https://wellness-wise.vercel.app](https://wellness-wise.vercel.app)
+- **Backend**: Deployed on Fly.io at [https://health-tracker-backend.fly.dev](https://health-tracker-backend.fly.dev)
+- **Database**: Managed by Supabase
 
 ---
