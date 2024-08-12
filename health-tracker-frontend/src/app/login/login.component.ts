@@ -17,6 +17,11 @@ export class LoginComponent {
   constructor(private apiService: ApiService, private router: Router) { }
 
   login() {
+    if (!this.credentials.username || !this.credentials.password) {
+      this.errorMessage = 'Username and password are required.';
+      return;
+    }
+    
     this.apiService.login(this.credentials).subscribe(response => {
       console.log('User logged in', response);
       localStorage.setItem('token', response.accessToken);

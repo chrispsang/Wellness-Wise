@@ -18,6 +18,11 @@ export class RegisterComponent {
   constructor(private apiService: ApiService, private router: Router) { }
 
   register() {
+    if (!this.user.username || !this.user.password || !this.user.email) {
+      this.errorMessage = 'All fields are required.';
+      return;
+    }
+
     if (!this.validateEmail(this.user.email)) {
       this.errorMessage = 'Please enter a valid email address.';
       return;
