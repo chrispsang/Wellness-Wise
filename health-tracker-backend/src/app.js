@@ -14,15 +14,22 @@ const app = express();
 app.use(bodyParser.json());
 
 const corsOptions = {
-    origin: ['https://wellness-wise.vercel.app', 'http://localhost:4200'], 
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  };
-  
-  app.use(cors(corsOptions));
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, Postman, etc.)
+    if (!origin || origin.startsWith('http://localhost') || origin === 'https://wellness-wise.vercel.app') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
-    res.send('Welcome to the Health Tracker API!');
+  res.send('Welcome to the Health Tracker API!');
 });
 
 app.use('/users', userRoutes);
@@ -33,3 +40,4 @@ app.use('/moods', moodRoutes);
 app.use('/goals', goalRoutes);
 
 module.exports = app;
+
