@@ -38,9 +38,14 @@ def suggest_workout_routine(user_data):
     for workout_type in most_frequent_types:
         alternatives = workout_map.get(workout_type.lower(), general_recommendations)
         recommended_type = random.choice(alternatives).capitalize()
+
+        # Calculate the average duration for this workout type
         avg_duration = df[df['type'] == workout_type]['duration'].mean()
+        if pd.isna(avg_duration):
+            avg_duration = 0  # fallback in case of NaN
+
         adjusted_duration = round(avg_duration * random.uniform(0.9, 1.1))
-        
+
         recommendation_text = f"Since you've been doing {workout_type.capitalize()} regularly, why not try {recommended_type} for about {adjusted_duration} minutes next time? {random.choice(workout_tips)}"
         recommendations.append(recommendation_text)
     
