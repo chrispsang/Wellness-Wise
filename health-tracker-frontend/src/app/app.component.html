@@ -1,10 +1,5 @@
 <nav *ngIf="showNav" class="navbar">
   <a routerLink="/dashboard" class="nav-link">Dashboard</a>
-  <a routerLink="/workout" class="nav-link">Workouts</a>
-  <a routerLink="/diet" class="nav-link">Diet</a>
-  <a routerLink="/sleep" class="nav-link">Sleep</a>
-  <a routerLink="/mood" class="nav-link">Mood</a>
-  <a routerLink="/goal" class="nav-link">Goals</a>
   <a (click)="logout()" class="nav-link">Logout</a>
 </nav>
 <router-outlet></router-outlet>
